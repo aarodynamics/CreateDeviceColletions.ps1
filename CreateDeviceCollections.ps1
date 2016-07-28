@@ -123,7 +123,7 @@ write-host "Starting script..." -ForegroundColor Yellow
 # connect to ConfigMgr
 #
 
-Import-Module $CMDrive'\Program Files\Microsoft Configuration Manager\AdminConsole\bin\ConfigurationManager.psd1'
+Import-Module 'C:\Program Files (x86)\Microsoft Configuration Manager\AdminConsole\bin\ConfigurationManager.psd1' # Import the ConfigurationManager.psd1 module 
 $SiteCode=Get-PSDrive -PSProvider CMSite
 write-host "Connecting to " -ForegroundColor White -NoNewline
 write-host $SiteCode -ForegroundColor Green -NoNewLine
@@ -172,7 +172,7 @@ Add-Membership-Query($TargetCollection)
 
 $TargetCollection = $Collection_7
 $RuleName = "All Windows 10 Current Branch Computers"
-$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System where SMS_R_System.OSBranch = 0 and SMS_R_System.OperatingSystemNameandVersion = 'Microsoft Windows NT Workstation 10.0'"
+$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_OPERATING_SYSTEM on SMS_G_System_OPERATING_SYSTEM.ResourceId = SMS_R_System.ResourceId where SMS_R_System.OSBranch = 0 and SMS_G_System_OPERATING_SYSTEM.BuildNumber > '10000'"
 Add-Membership-Query($TargetCollection)
 
 # add some exclude rules
@@ -183,7 +183,7 @@ ExcludeCollection $ExcludeCollectionName $check_ExcludeRule $TargetCollection
 
 $TargetCollection = $Collection_8
 $RuleName = "All Windows 10 Current Branch for Business Computers"
-$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System where SMS_R_System.OSBranch = 1 and SMS_R_System.OperatingSystemNameandVersion = 'Microsoft Windows NT Workstation 10.0'"
+$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_OPERATING_SYSTEM on SMS_G_System_OPERATING_SYSTEM.ResourceId = SMS_R_System.ResourceId where SMS_R_System.OSBranch = 1 and SMS_G_System_OPERATING_SYSTEM.BuildNumber > '10000'"
 Add-Membership-Query($TargetCollection)
 
 # add some exclude rules
@@ -194,7 +194,7 @@ ExcludeCollection $ExcludeCollectionName $check_ExcludeRule $TargetCollection
 
 $TargetCollection = $Collection_9
 $RuleName = "All Windows 10 Long Term Servicing Branch Computers"
-$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_OPERATING_SYSTEM on SMS_G_System_OPERATING_SYSTEM.ResourceID = SMS_R_System.ResourceId where SMS_R_System.OperatingSystemNameandVersion = 'Microsoft Windows NT Workstation 10.0' and (SMS_G_System_OPERATING_SYSTEM.BuildNumber != '10586' and SMS_G_System_OPERATING_SYSTEM.BuildNumber != '10240')"
+$RuleNameQuery = "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_OPERATING_SYSTEM on SMS_G_System_OPERATING_SYSTEM.ResourceID = SMS_R_System.ResourceId where SMS_G_System_OPERATING_SYSTEM.BuildNumber > '10000' and (SMS_G_System_OPERATING_SYSTEM.BuildNumber != '14393' and SMS_G_System_OPERATING_SYSTEM.BuildNumber != '10586' and SMS_G_System_OPERATING_SYSTEM.BuildNumber != '10240')"
 Add-Membership-Query($TargetCollection)
 
 # add some exclude rules
